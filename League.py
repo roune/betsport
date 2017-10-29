@@ -5,7 +5,6 @@ Created by Ricardo Morato
 
 import numpy as np
 import copy
-from Structure import structure
 from Jornada import Jornada
 
 
@@ -14,9 +13,12 @@ class League(object):
         self.__file = f
         self.__data = None
         self.__jornadas = []
-        self.read_file()
+        self.set_data()
 
-    def read_file(self):
+    def get_jornada(self, n):
+        return self.__jornadas[n]
+
+    def set_data(self):
         with open(self.__file, 'r') as f:
             lines = f.read().splitlines()
 
@@ -45,20 +47,24 @@ class League(object):
                     result = data[6]
                     if index[1] == 2: # Home
                         if result == 'H': # Home wins
-                            jornada.add_win(t)
+                            jornada.add_home_win(t)
                         elif result == 'A': # Away wins
-                            jornada.add_loose(t)
+                            jornada.add_home_loose(t)
                         else: # Draw
-                            jornada.add_draw(t)
+                            jornada.add_home_draw(t)
+
+                        jornada.add_home_goals(t, int(data[4]))
+                        jornada.add_home_goals_against(t, int(data[5]))
                     else: # Away
                         if result == 'H':  # Home wins
-                            jornada.add_loose(t)
+                            jornada.add_away_loose(t)
                         elif result == 'A':  # Away wins
-                            jornada.add_win(t)
+                            jornada.add_away_win(t)
                         else:  # Draw
-                            jornada.add_draw(t)
+                            jornada.add_away_draw(t)
+
+                        jornada.add_away_goals(t, int(data[5]))
+                        jornada.add_away_goals_against(t, int(data[4]))
 
                 self.__jornadas.append(jornada)
                 i += 1
-
-            print jornada.get_classification() # Print last jornada
