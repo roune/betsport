@@ -4,6 +4,7 @@ Created by Ricardo Morato
 """
 
 import numpy as np
+
 from Structure import structure
 
 
@@ -22,6 +23,9 @@ class Data(object):
 
     def get_attr_names(self):
         return self.__attr_names
+
+    def get_league(self):
+        return self.__league
 
     def get_nom_attr_names(self):
         aux = []
@@ -46,6 +50,9 @@ class Data(object):
 
     def get_norm_data(self):
         return self.__data_norm_ready
+
+    def get_matches(self, jornada):
+        yield
 
     # !Problem with -999 data. Change -999 to other value?
     def norm_data(self):

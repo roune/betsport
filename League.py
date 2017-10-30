@@ -5,6 +5,8 @@ Created by Ricardo Morato
 
 import numpy as np
 import copy
+
+from Data import Data
 from Jornada import Jornada
 
 
@@ -13,60 +15,77 @@ class League(object):
         self.__file = f
         self.__data = None
         self.__jornadas = []
+        self.__dataset = Data(f, True)
+
         self.set_data()
 
     def get_jornada(self, n):
         return self.__jornadas[n]
 
     def set_data(self):
-        with open(self.__file, 'r') as f:
-            lines = f.read().splitlines()
+        '''
+        for line in self.__dataset:
+            print (line)'''
+        dataset = self.__dataset.get_data()
 
-            num_lines = sum(1 for line in open(self.__file))
-            num_lines -= 1  # Quit attr name row
-            
-            # self.__data = np.array(map(lambda x: list(x.split(',')), lines[0:]))
-            self.__data = np.array([list(x.split(',')) for x in lines[0:]])
-            
-            aux = self.__data[1:, 2]
-            teams = sorted(set(aux))
+        aux = dataset[:, 2]
+        teams = sorted(set(aux))
 
-            n_jornadas = len(np.argwhere(self.__data == teams[0]))
+        matches = []
 
-            i = 0
-            while i < n_jornadas:
-                if i == 0:
-                    jornada = Jornada(teams)
-                else:
-                    jornada = copy.copy(self.__jornadas[i-1])
+        for team in teams:
+            aux = []
 
-                for team in teams:
-                    index = np.argwhere(self.__data == team)[i]
-                    data = self.__data[index[0]] # Line in file for the team and jornada = i
-                    t = teams.index(team) # Index of the team
-                    
-                    result = data[6]
-                    if index[1] == 2: # Home
-                        if result == 'H': # Home wins
-                            jornada.add_home_win(t)
-                        elif result == 'A': # Away wins
-                            jornada.add_home_loose(t)
-                        else: # Draw
-                            jornada.add_home_draw(t)
+            for match in np.argwhere(dataset[:, 2] == (team)):
+                aux.append(match[0])
 
-                        jornada.add_home_goals(t, int(data[4]))
-                        jornada.add_home_goals_against(t, int(data[5]))
-                    else: # Away
-                        if result == 'H':  # Home wins
-                            jornada.add_away_loose(t)
-                        elif result == 'A':  # Away wins
-                            jornada.add_away_win(t)
-                        else:  # Draw
-                            jornada.add_away_draw(t)
+            for match in np.argwhere(dataset[:, 3] == (team)):
+                aux.append(match[0])
 
-                        jornada.add_away_goals(t, int(data[5]))
-                        jornada.add_away_goals_against(t, int(data[4]))
-                
+            matches.append(sorted(aux))
+
+        for team in matches:
+            print team
+
+        i = 0
+        while i < len(matches[0]):
+            if i == 0:
+                jornada = Jornada(teams)
+            else:
+                jornada = copy.copy(self.__jornadas[i-1])
+
+            for team in teams:
+                match = matches[int(team)][i]
+                data = dataset[match]  # Line in file for the team and jornada = i
+
+                result = data[6]
+                if data[2] == team:  # Home
+                    if result == 2:  # Home wins
+                        jornada.add_home_win(int(team))
+                    elif result == 1:  # Away wins
+                        jornada.add_home_loose(int(team))
+                    else:  # Draw
+                        jornada.add_home_draw(int(team))
+
+                    jornada.add_home_goals(int(team), int(data[4]))
+                    jornada.add_home_goals_against(int(team), int(data[5]))
+                else:  # Away
+                    if result == 2:  # Home wins
+                        jornada.add_away_loose(int(team))
+                    elif result == 1:  # Away wins
+                        jornada.add_away_win(int(team))
+                    else:  # Draw
+                        jornada.add_away_draw(int(team))
+
+                    jornada.add_away_goals(int(team), int(data[5]))
+                    jornada.add_away_goals_against(int(team), int(data[4]))
+
+
                 jornada.add_classification()
+
+                # data = self.__data[index[0]]  # Line in file for the team and jornada = i
+                # t = teams.index(team)  # Index of the team
+
                 self.__jornadas.append(jornada)
-                i += 1
+
+            i += 1
