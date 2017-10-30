@@ -6,5 +6,8 @@ if __name__ == '__main__':
     #dataset = Data('./SP1.csv', True)
     #print dataset.get_data()
     l = League('./SP1.csv')
-    print l.get_jornada(8).get_classification()
+    #for i in range(20):
+    #print (l.get_jornada(8).get_classification().tolist())
+    for team in l.get_jornada(8).get_classification().tolist():
+        print (team)
     #np.savetxt('output.out', dataset.get_norm_data(), delimiter=',')

@@ -24,9 +24,10 @@ class League(object):
 
             num_lines = sum(1 for line in open(self.__file))
             num_lines -= 1  # Quit attr name row
-
-            self.__data = np.array(map(lambda x: list(x.split(',')), lines[0:]))
-
+            
+            # self.__data = np.array(map(lambda x: list(x.split(',')), lines[0:]))
+            self.__data = np.array([list(x.split(',')) for x in lines[0:]])
+            
             aux = self.__data[1:, 2]
             teams = sorted(set(aux))
 
@@ -43,7 +44,7 @@ class League(object):
                     index = np.argwhere(self.__data == team)[i]
                     data = self.__data[index[0]] # Line in file for the team and jornada = i
                     t = teams.index(team) # Index of the team
-
+                    
                     result = data[6]
                     if index[1] == 2: # Home
                         if result == 'H': # Home wins
@@ -65,6 +66,7 @@ class League(object):
 
                         jornada.add_away_goals(t, int(data[5]))
                         jornada.add_away_goals_against(t, int(data[4]))
-
+                
+                jornada.add_classification()
                 self.__jornadas.append(jornada)
                 i += 1

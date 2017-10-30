@@ -8,8 +8,8 @@ import numpy as np
 
 class Jornada(object):
     def __init__(self, teams):
-        cols = 17
-        self.__classification = np.empty((len(teams), cols))
+        cols = 18
+        self.__classification = np.zeros((len(teams), cols))
         '''
         self.__classification[0, 0] = 'Team'
         self.__classification[0, 1] = 'Points'
@@ -28,17 +28,29 @@ class Jornada(object):
         self.__classification[0, 14] = 'Away goals'
         self.__classification[0, 15] = 'Home goals against'
         self.__classification[0, 16] = 'Away goals against'
+        self.__classification[0, 17] = 'Position in league'
         '''
-
+        translate_team_from_index = []
         # Work with index because np array dont work with Strings
         i = 0
         while i < len(teams):
-            self.__classification[i, 0] = i # Teams column
+            self.__classification[i, 0] = i # Teams column REVISARRRRRRRRR
+            translate_team_from_index.insert(i, teams[i])
+            #for j in range(1,cols):
+            #    self.__classification[i, j] = 0
             i += 1
 
     def get_classification(self):
         #arr[arr[:, 1].argsort()]
-        return self.__classification[self.__classification[:, 1].argsort()].astype(int)
+        return self.__classification[(-self.__classification[:, 1]).argsort()].astype(int)
+    
+    def add_classification(self):
+        clas = self.get_classification()
+        for position in range(len(clas)):
+            self.__classification[clas[position, 0], 17] = position + 1
+    
+    def get_team(self, index):
+        return translate_team_from_index[index]
 
     def add_home_win(self, team):
         self.__classification[team, 5] += 1  # Add 1 in Home wins column
@@ -96,3 +108,4 @@ class Jornada(object):
     def add_away_goals_against(self, team, goals):
         self.__classification[team, 16] += goals
         self.add_goals_against(team, goals)
+        
