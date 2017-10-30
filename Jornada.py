@@ -40,9 +40,6 @@ class Jornada(object):
             #    self.__classification[i, j] = 0
             i += 1
 
-    def add_match(self, match):
-        print match
-
     def get_classification(self):
         #arr[arr[:, 1].argsort()]
         return self.__classification[(-self.__classification[:, 1]).argsort()].astype(int)
