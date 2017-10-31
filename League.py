@@ -5,6 +5,9 @@ Created by Ricardo Morato
 
 import numpy as np
 import copy
+from heapq import merge
+
+from Data import Data
 from Jornada import Jornada
 
 
@@ -13,25 +16,67 @@ class League(object):
         self.__file = f
         self.__data = None
         self.__jornadas = []
+        self.__data_full = []
+        self.__teams = []
+        self.__matches = None
+        self.__dataset = Data('./SP1.csv', True).get_data().tolist()
         self.set_data()
+
+        i = 0
+
+        while i < len(self.__jornadas):
+            self.set_jornada_full(i)
+            i += 1
 
     def get_jornada(self, n):
         return self.__jornadas[n]
+
+    def get_jornada_full(self, n):
+        return self.__data_full[(n)*len(self.__teams):(n+1)*len(self.__teams)]
+
+    def set_jornada_full(self, n):
+        jornada = self.__jornadas[n].get_classification().tolist()
+
+        for team in jornada:
+            line = self.__matches[team[0]]
+            additional = self.__dataset[line[n][0]-1]
+
+            aux = []
+            aux.append(team)
+            aux.append(additional)
+
+            #Hace merge de dos lista pero mezcla los ordenes
+            # y ya no se donde está cada cosa xd
+            #aux.append(list(merge(team, additional)))
+
+            self.__data_full.append(aux)
+
+    def get_index_team(self, team):
+        return self.__teams.index(team)
 
     def set_data(self):
         with open(self.__file, 'r') as f:
             lines = f.read().splitlines()
 
-            num_lines = sum(1 for line in open(self.__file))
+            num_lines = len(lines)
             num_lines -= 1  # Quit attr name row
-            
+
             # self.__data = np.array(map(lambda x: list(x.split(',')), lines[0:]))
             self.__data = np.array([list(x.split(',')) for x in lines[0:]])
             
             aux = self.__data[1:, 2]
-            teams = sorted(set(aux))
+            self.__teams = sorted(set(aux))
+            teams = self.__teams
 
             n_jornadas = len(np.argwhere(self.__data == teams[0]))
+
+            all_matches = []
+
+            for team in teams:
+                matches = np.argwhere(self.__data == team).tolist()
+                all_matches.append(matches)
+
+            self.__matches = all_matches
 
             i = 0
             while i < n_jornadas:
@@ -41,10 +86,10 @@ class League(object):
                     jornada = copy.deepcopy(self.__jornadas[i-1])
 
                 for team in teams:
-                    index = np.argwhere(self.__data == team)[i]
+                    t = self.get_index_team(team)  # Index of the team
+                    index = all_matches[t][i]
                     data = self.__data[index[0]] # Line in file for the team and jornada = i
-                    t = teams.index(team) # Index of the team
-                    
+
                     result = data[6]
                     if index[1] == 2: # Home
                         if result == 'H': # Home wins
