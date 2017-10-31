@@ -38,7 +38,7 @@ class League(object):
                 if i == 0:
                     jornada = Jornada(teams)
                 else:
-                    jornada = copy.copy(self.__jornadas[i-1])
+                    jornada = copy.deepcopy(self.__jornadas[i-1])
 
                 for team in teams:
                     index = np.argwhere(self.__data == team)[i]
