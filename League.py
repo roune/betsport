@@ -46,7 +46,7 @@ class League(object):
             aux.append(additional)
 
             #Hace merge de dos lista pero mezcla los ordenes
-            # y ya no se donde está cada cosa xd
+            # y ya no se donde esta cada cosa xd
             #aux.append(list(merge(team, additional)))
 
             self.__data_full.append(aux)
