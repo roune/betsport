@@ -34,7 +34,7 @@ class Jornada(object):
         # Work with index because np array dont work with Strings
         i = 0
         while i < len(teams):
-            self.__classification[i, 0] = i # Teams column REVISARRRRRRRRR
+            self.__classification[i, 0] = i # Teams column
             translate_team_from_index.insert(i, teams[i])
             #for j in range(1,cols):
             #    self.__classification[i, j] = 0

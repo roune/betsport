@@ -81,7 +81,8 @@ class Data(object):
             num_lines -= 1  # Quit attr name row
             num_cols = len(self.__attr_names)
 
-            self.__data = np.array(map(lambda x: list(x.split(',')), lines[0:]))
+            # self.__data = np.array(map(lambda x: list(x.split(',')), lines[0:]))
+            self.__data = np.array([list(x.split(',')) for x in lines[0:]])
             self.__data_ready = np.empty((num_lines, num_cols))
 
             i = 0 # Cols

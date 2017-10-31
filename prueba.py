@@ -8,6 +8,6 @@ if __name__ == '__main__':
     l = League('./SP1.csv')
     #for i in range(20):
     #print (l.get_jornada(8).get_classification().tolist())
-    for team in l.get_jornada(2).get_classification().tolist():
+    for team in l.get_jornada(8).get_classification().tolist():
         print (team)
     #np.savetxt('output.out', dataset.get_norm_data(), delimiter=',')
