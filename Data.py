@@ -111,7 +111,18 @@ class Data(object):
 
                 else:
                     # If value is empty, error. Change the empty values for -999 in the .csv
-                    aux = self.__data[1:,i].astype('float')
+                    try:
+                        aux = self.__data[1:,i].astype('float')
+                    except IndexError:
+                        print self.__data.shape
+                        exit()
+                    except ValueError:
+                        spaces = np.argwhere(self.__data[1:, i] == '').tolist()
+
+                        if spaces:
+                            for space in spaces:
+                                self.__data_ready[space, i] = -999
+
                     j = 0
                     while j < num_lines:
                         self.__data_ready[j, i] = aux[j]

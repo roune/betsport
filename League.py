@@ -19,7 +19,8 @@ class League(object):
         self.__data_full = []
         self.__teams = []
         self.__matches = None
-        self.__dataset = Data('./SP1.csv', True).get_data().tolist()
+        self.__d = Data(f, True)
+        self.__dataset = self.__d.get_data().tolist()
         self.set_data()
 
         i = 0
@@ -27,6 +28,12 @@ class League(object):
         while i < len(self.__jornadas):
             self.set_jornada_full(i)
             i += 1
+
+    def get_attr_names(self):
+        data = []
+        data.append(self.__jornadas[0].get_attr_names())
+        data.append(self.__d.get_attr_names())
+        return data
 
     def get_jornada(self, n):
         return self.__jornadas[n]

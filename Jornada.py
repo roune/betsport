@@ -10,26 +10,15 @@ class Jornada(object):
     def __init__(self, teams):
         cols = 18
         self.__classification = np.zeros((len(teams), cols))
-        '''
-        self.__classification[0, 0] = 'Team'
-        self.__classification[0, 1] = 'Points'
-        self.__classification[0, 2] = 'Wins'
-        self.__classification[0, 3] = 'Draws'
-        self.__classification[0, 4] = 'Loose'
-        self.__classification[0, 5] = 'Home wins'
-        self.__classification[0, 6] = 'Home draws'
-        self.__classification[0, 7] = 'Home loose'
-        self.__classification[0, 8] = 'Away wins'
-        self.__classification[0, 9] = 'Away draws'
-        self.__classification[0, 10] = 'Away loose'
-        self.__classification[0, 11] = 'Goals'
-        self.__classification[0, 12] = 'Goals against'
-        self.__classification[0, 13] = 'Home goals'
-        self.__classification[0, 14] = 'Away goals'
-        self.__classification[0, 15] = 'Home goals against'
-        self.__classification[0, 16] = 'Away goals against'
-        self.__classification[0, 17] = 'Position in league'
-        '''
+        self.__attr_names = ['Team', 'Points',
+                             'Wins', 'Draws', 'Loose',
+                             'Home wins', 'Home draws', 'Home loose',
+                             'Away wins', 'Away draws', 'Away loose',
+                             'Goals', 'Goals against',
+                             'Home goals', 'Away goals',
+                             'Home goals against', 'Away goals against',
+                             'Position']
+
         translate_team_from_index = []
         # Work with index because np array dont work with Strings
         i = 0
@@ -39,6 +28,9 @@ class Jornada(object):
             #for j in range(1,cols):
             #    self.__classification[i, j] = 0
             i += 1
+
+    def get_attr_names(self):
+        return self.__attr_names
 
     def get_classification(self):
         #arr[arr[:, 1].argsort()]
