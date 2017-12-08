@@ -4,6 +4,7 @@ Created by Ricardo Morato
 """
 
 import numpy as np
+
 from Structure import structure
 
 
@@ -114,7 +115,7 @@ class Data(object):
                     try:
                         aux = self.__data[1:,i].astype('float')
                     except IndexError:
-                        print self.__data.shape
+                        print (self.__data.shape)
                         exit()
                     except ValueError:
                         spaces = np.argwhere(self.__data[1:, i] == '').tolist()

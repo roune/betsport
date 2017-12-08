@@ -1,7 +1,4 @@
-import csv
-import numpy as np
-from sklearn import preprocessing
-from sklearn.cross_validation import cross_val_score, train_test_split
+from sklearn.cross_validation import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import GaussianNB
 
@@ -14,7 +11,7 @@ if __name__ == '__main__':
 
     i = 2007
     while i <= 2017:
-        print './datasets/SP1' + str(i) + '.csv'
+        print ('./datasets/SP1' + str(i) + '.csv')
         l = League('./datasets/SP1' + str(i) + '.csv')
 
         if i == 2007:
