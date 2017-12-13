@@ -44,7 +44,7 @@ class Data(object):
 
         home_columns = []
         away_columns = []
-        print columns
+        print (columns)
         for column in columns:
             home_columns.append('HT' + column)
             away_columns.append('AT' + column)
@@ -56,8 +56,9 @@ class Data(object):
 
         j = 0
         for team in teams:
-            i = 0
+            i = 1
             while i < len(matches[team]):
+
                 if not self.__av:
                     match_day = self.__league.get_match_day(i)
                 else:
@@ -69,7 +70,7 @@ class Data(object):
 
                 match_day.columns = new_columns
                 home_team_data = match_day[match_day.HTTeam == matches[team].HomeTeam.values[i]]
-                result = pd.merge(matches[team].iloc[[i]], home_team_data, left_on='HomeTeam', right_on='HTTeam')
+                result = pd.merge(matches[team].iloc[[i-1]], home_team_data, left_on='HomeTeam', right_on='HTTeam')
 
                 new_columns = []
                 for column in columns:
