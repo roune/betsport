@@ -1,133 +1,86 @@
 """
 Created by Ricardo Morato
-28/10/2017
+06/12/2017
 """
 
-import numpy as np
+import pandas as pd
 
-from Structure import structure
+from League import League
 
 
 class Data(object):
-    def __init__(self, f, norm = False):
-        self.__file = f
-        self.__attr_names = []
-        self.__data = None
-        self.__data_ready = None
-        self.__data_norm_ready = None
+    def __init__(self, f, fout=None, attrs=None, averages=None):
+        self.__data = pd.read_csv(f)
+        self.__league = League('./Datasets/SP1_new.csv')
+        self.__attrs = None
+        self.__averages = None
+        self.__av = False
 
-        self.read_file()
+        if attrs is not None and averages is not None:
+            self.__attrs = attrs
+            self.__averages = averages
+            self.__av = True
 
-        if norm:
-            self.norm_data()
+        self.__write_data_in_csv(fout)
 
-    def get_attr_names(self):
-        return self.__attr_names
+    def __write_data_in_csv(self, fout):
+        teams = []
+        matches = {}
 
-    def get_nom_attr_names(self):
-        aux = []
+        for index, row in self.__data.iterrows():
+            teams.append(row['HomeTeam'])
 
-        for attr in self.__attr_names:
-            if structure.has_key(attr):
-                aux.append(attr)
+        teams = sorted(set(teams))
 
-        return aux
+        for team in teams:
+            matches[team] = self.__data[(self.__data.HomeTeam == team)][['Div', 'Date', 'HomeTeam', 'AwayTeam', 'HTR']] #  | (self.__data.AwayTeam == team)
 
-    def get_cont_attr_names(self):
-        aux = []
+        columns_dt = ['Div', 'Date', 'HomeTeam', 'AwayTeam', 'HTR']
 
-        for attr in self.__attr_names:
-            if not structure.has_key(attr):
-                aux.append(attr)
+        if not self.__av:
+            columns = self.__league.get_match_day(0).columns.values.tolist()
+        else:
+            columns = self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages).columns.values.tolist()
 
-        return aux
+        home_columns = []
+        away_columns = []
+        print columns
+        for column in columns:
+            home_columns.append('HT' + column)
+            away_columns.append('AT' + column)
 
-    def get_data(self):
-        return self.__data_ready
+        columns_dt = columns_dt + home_columns
+        columns_dt = columns_dt + away_columns
 
-    def get_norm_data(self):
-        return self.__data_norm_ready
+        new_df = pd.DataFrame(columns=columns_dt)
 
-    # !Problem with -999 data. Change -999 to other value?
-    def norm_data(self):
-        num_cols = self.__data_ready.shape[1]
-        num_lines = self.__data_ready.shape[0]
-
-        # Not good solution. Not discrimine de nominal data
-
-        i = 0
-        while i < num_cols:
-            self.__data_norm_ready = np.empty((num_lines, num_cols))
-
-            col = self.__data_ready[:, i]
-            mean = np.mean(col)
-            std = np.std(col)
-
-            if std == 0: std = 0.0000001
-
-            j = 0
-            while j < num_lines:
-                self.__data_norm_ready[j, i] = ((self.__data_ready[j, i] - mean) / std)
-                j += 1
-
-            i += 1
-
-    def read_file(self):
-        with open(self.__file, 'r') as f:
-            lines = f.read().splitlines()
-
-            self.__attr_names = lines[0].split(',')
-
-            num_lines = sum(1 for line in open(self.__file))
-            num_lines -= 1  # Quit attr name row
-            num_cols = len(self.__attr_names)
-
-            # self.__data = np.array(map(lambda x: list(x.split(',')), lines[0:]))
-            self.__data = np.array([list(x.split(',')) for x in lines[0:]])
-            self.__data_ready = np.empty((num_lines, num_cols))
-
-            i = 0 # Cols
-            for attr in self.__data[0]:
-                if structure.has_key(attr):
-                    aux = self.__data[1:, i]
-                    keys = sorted(set(aux))
-                    aux_dict = {}
-
-                    # Asign a numeric value to the key
-                    j = 0
-                    for key in keys:
-                        aux_dict[key] = j
-                        j += 1
-
-                    # Change the key for the numeric value
-                    j = 0
-                    while j < len(aux):
-                        aux[j] = aux_dict[aux[j]]
-                        j += 1
-
-                    j = 0
-                    while j < num_lines:
-                        self.__data_ready[j, i] = aux[j]
-                        j += 1
-
+        j = 0
+        for team in teams:
+            i = 0
+            while i < len(matches[team]):
+                if not self.__av:
+                    match_day = self.__league.get_match_day(i)
                 else:
-                    # If value is empty, error. Change the empty values for -999 in the .csv
-                    try:
-                        aux = self.__data[1:,i].astype('float')
-                    except IndexError:
-                        print (self.__data.shape)
-                        exit()
-                    except ValueError:
-                        spaces = np.argwhere(self.__data[1:, i] == '').tolist()
+                    match_day = self.__league.get_match_day_with_weighted_average(i, self.__attrs, self.__averages)
 
-                        if spaces:
-                            for space in spaces:
-                                self.__data_ready[space, i] = -999
+                new_columns = []
+                for column in columns:
+                    new_columns.append('HT' + column)
 
-                    j = 0
-                    while j < num_lines:
-                        self.__data_ready[j, i] = aux[j]
-                        j += 1
+                match_day.columns = new_columns
+                home_team_data = match_day[match_day.HTTeam == matches[team].HomeTeam.values[i]]
+                result = pd.merge(matches[team].iloc[[i]], home_team_data, left_on='HomeTeam', right_on='HTTeam')
+
+                new_columns = []
+                for column in columns:
+                    new_columns.append('AT' + column)
+
+                match_day.columns = new_columns
+                away_team_data = match_day[match_day.ATTeam == matches[team].AwayTeam.values[i]]
+                result = pd.merge(result, away_team_data, left_on='AwayTeam', right_on='ATTeam')
+
+                new_df.loc[j] = result.loc[0]
+                j += 1
                 i += 1
-
-            #np.savetxt('output.out', self.data_ready, delimiter=',')
+                
+        new_df.to_csv(fout, index=False)

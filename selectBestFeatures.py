@@ -21,17 +21,17 @@ class selectBestFeatures(object):
         self.clasificador = clasificador
 
 
-    def bestFeatures(self, ds,cv=None):
+    def bestFeatures(self, df,cv=None):
        '''
 
-       :param ds:  Dataset con las clases en la ultima columna
-       :type ds: numpy Array
+       :param df:  Dataset con las clases en la columna FTR
+       :type df: dataFrame
        :param cv:  Iterador cross validation (optional)
        :return:  Dataset
        '''
 
-       y = ds[-1]
-       X = ds[:,:-1]
+       y = df['FTR']
+       X = df.loc[:,df.columns.value != 'FTR']
        claFit = self.clasificador.fit(X,y)
 
        if cv==None:
