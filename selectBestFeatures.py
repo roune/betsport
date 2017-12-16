@@ -1,8 +1,9 @@
 
+import numpy as np
 from sklearn.feature_selection import RFECV, SelectFromModel
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
-
+from sklearn.preprocessing import LabelEncoder
 
 
 class selectBestFeatures(object):
@@ -21,7 +22,7 @@ class selectBestFeatures(object):
         self.clasificador = clasificador
 
 
-    def bestFeatures(self, df,cv=None):
+    def bestFeatures(self, data,cv=None):
        '''
 
        :param df:  Dataset con las clases en la columna FTR
@@ -29,9 +30,13 @@ class selectBestFeatures(object):
        :param cv:  Iterador cross validation (optional)
        :return:  Dataset
        '''
-
-       y = df['FTR']
-       X = df.loc[:,df.columns.value != 'FTR']
+       lenc = LabelEncoder()
+       y_df = data['HTR']
+       x_df = data.loc[:, data.columns != 'HTR']
+       y = lenc.fit_transform(np.array(y_df))
+       X = np.array(x_df.loc[:,
+                    [True if c not in ['Div', 'Date', 'HomeTeam', 'AwayTeam', 'HTTeam', 'ATTeam'] else False for c in
+                     x_df.columns]])
        claFit = self.clasificador.fit(X,y)
 
        if cv==None:
