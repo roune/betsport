@@ -11,7 +11,7 @@ from League import League
 class Data(object):
     def __init__(self, f, fout=None, attrs=None, averages=None):
         self.__data = pd.read_csv(f)
-        self.__league = League('./Datasets/SP1_new.csv')
+        self.__league = League(f)
         self.__attrs = None
         self.__averages = None
         self.__av = False
@@ -70,9 +70,9 @@ class Data(object):
                 else:
                     if i == 0:
                         aux = self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages).loc[:,self.__league.get_match_day_with_weighted_average(0).columns != 'Team']
-                        match_day = self.__league.get_match_day_with_weighted_average(0)
+                        match_day = self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages)
                         aux *= 0
-                        match_day.loc[:,self.__league.get_match_day_with_weighted_average(0).columns != 'Team'] = aux
+                        match_day.loc[:,self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages).columns != 'Team'] = aux
                     else:
                         match_day = self.__league.get_match_day_with_weighted_average(i-1, self.__attrs, self.__averages)
 
@@ -82,9 +82,7 @@ class Data(object):
 
                 match_day.columns = new_columns
                 home_team_data = match_day[match_day.HTTeam == matches[team].HomeTeam.values[i]]
-                #print match_day.HTTeam
-                #print matches[team].HomeTeam.values[i]
-                #print home_team_data
+            
                 result = pd.merge(matches[team].iloc[[i]], home_team_data, left_on='HomeTeam', right_on='HTTeam')
 
                 new_columns = []
@@ -93,9 +91,8 @@ class Data(object):
 
                 match_day.columns = new_columns
                 away_team_data = match_day[match_day.ATTeam == matches[team].AwayTeam.values[i]]
-                result = pd.merge(result, away_team_data, left_on='AwayTeam', right_on='ATTeam')
 
-                #print result
+                result = pd.merge(result, away_team_data, left_on='AwayTeam', right_on='ATTeam')
 
                 new_df.loc[j] = result.loc[0]
                 j += 1

@@ -17,5 +17,10 @@ if __name__ == '__main__':
         l.to_csv('./Datasets/pandas.csv', sep=',', encoding='utf-8', mode='a')
         i += 1'''
 
-    d = Data('./Datasets/SP1_new.csv', './Datasets/SP1_data.csv', 'Goals,GoalsAgainst,Shoots,ShootsAgainst', '1,1,1,1,1')
+    #d = Data('./Datasets/SP1-2017.csv', './Datasets/SP1-2017_data.csv')
+    d = Data('./Datasets/SP1-2016.csv', './Datasets/SP1-2016_data.csv')
+    d = Data('./Datasets/SP1-2015.csv', './Datasets/SP1-2015_data.csv')
+    d = Data('./Datasets/SP1-2014.csv', './Datasets/SP1-2014_data.csv')
+    d = Data('./Datasets/SP1-2013.csv', './Datasets/SP1-2013_data.csv')
+    d = Data('./Datasets/SP1-2012.csv', './Datasets/SP1-2012_data.csv')
 
