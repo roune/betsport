@@ -41,7 +41,7 @@ class MatchDay(object):
                              'RedCards', 'RedCardsAgainst',
                              'HomeRedCards', 'AwayRedCards',
                              'HomeRedCardsAgainst', 'AwayRedCardsAgainst']
-        self.__numeric_attr = ['Team', 'Points',
+        self.__numeric_attr = ['Points',
                                'Wins', 'Draws', 'Looses',
                                'HomeWins', 'HomeDraws', 'HomeLooses',
                                'AwayWins', 'AwayDraws', 'AwayLooses',

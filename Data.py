@@ -56,13 +56,25 @@ class Data(object):
 
         j = 0
         for team in teams:
-            i = 1
+            i = 0
             while i < len(matches[team]):
 
                 if not self.__av:
-                    match_day = self.__league.get_match_day(i)
+                    if i == 0:
+                        aux = self.__league.get_match_day(0).loc[:,self.__league.get_match_day(0).columns != 'Team']
+                        match_day = self.__league.get_match_day(0)
+                        aux *= 0
+                        match_day.loc[:,self.__league.get_match_day(0).columns != 'Team'] = aux
+                    else:
+                        match_day = self.__league.get_match_day(i-1)
                 else:
-                    match_day = self.__league.get_match_day_with_weighted_average(i, self.__attrs, self.__averages)
+                    if i == 0:
+                        aux = self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages).loc[:,self.__league.get_match_day_with_weighted_average(0).columns != 'Team']
+                        match_day = self.__league.get_match_day_with_weighted_average(0)
+                        aux *= 0
+                        match_day.loc[:,self.__league.get_match_day_with_weighted_average(0).columns != 'Team'] = aux
+                    else:
+                        match_day = self.__league.get_match_day_with_weighted_average(i-1, self.__attrs, self.__averages)
 
                 new_columns = []
                 for column in columns:
@@ -70,7 +82,10 @@ class Data(object):
 
                 match_day.columns = new_columns
                 home_team_data = match_day[match_day.HTTeam == matches[team].HomeTeam.values[i]]
-                result = pd.merge(matches[team].iloc[[i-1]], home_team_data, left_on='HomeTeam', right_on='HTTeam')
+                #print match_day.HTTeam
+                #print matches[team].HomeTeam.values[i]
+                #print home_team_data
+                result = pd.merge(matches[team].iloc[[i]], home_team_data, left_on='HomeTeam', right_on='HTTeam')
 
                 new_columns = []
                 for column in columns:
@@ -80,8 +95,10 @@ class Data(object):
                 away_team_data = match_day[match_day.ATTeam == matches[team].AwayTeam.values[i]]
                 result = pd.merge(result, away_team_data, left_on='AwayTeam', right_on='ATTeam')
 
+                #print result
+
                 new_df.loc[j] = result.loc[0]
                 j += 1
                 i += 1
-                
+        
         new_df.to_csv(fout, index=False)
