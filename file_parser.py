@@ -33,13 +33,13 @@ if __name__ == '__main__':
                    'HomeRedCardsAgainst', 'AwayRedCardsAgainst']
 
     #d = Data('./Datasets/SP1-2017.csv', './Datasets/SP1-2017_data.csv')
-    d = Data('./Datasets/SP1-2016.csv', './Datasets/SP1-2016_normAverage.csv', attrs=','.join(averages_fields), averages='1,1,1,1,1')
+    d = Data('./Datasets/SP1-2016.csv', './Datasets/SP1-2016_weightedAverage.csv', attrs=','.join(averages_fields), averages='5,4,3,2,1')
     print "Finalizado el primer dataset"
-    d = Data('./Datasets/SP1-2015.csv', './Datasets/SP1-2015_normAverage.csv', attrs=','.join(averages_fields), averages='1,1,1,1,1')
+    d = Data('./Datasets/SP1-2015.csv', './Datasets/SP1-2015_weightedAverage.csv', attrs=','.join(averages_fields), averages='5,4,3,2,1')
     print "Finalizado el segundo dataset"
-    d = Data('./Datasets/SP1-2014.csv', './Datasets/SP1-2014_normAverage.csv', attrs=','.join(averages_fields), averages='1,1,1,1,1')
+    d = Data('./Datasets/SP1-2014.csv', './Datasets/SP1-2014_weightedAverage.csv', attrs=','.join(averages_fields), averages='5,4,3,2,1')
     print "Finalizado el tercer dataset"
-    d = Data('./Datasets/SP1-2013.csv', './Datasets/SP1-2013_normAverage.csv', attrs=','.join(averages_fields), averages='1,1,1,1,1')
+    d = Data('./Datasets/SP1-2013.csv', './Datasets/SP1-2013_weightedAverage.csv', attrs=','.join(averages_fields), averages='5,4,3,2,1')
     print "Finalizado el penultimo dataset"
-    d = Data('./Datasets/SP1-2012.csv', './Datasets/SP1-2012_normAverage.csv', attrs=','.join(averages_fields), averages='1,1,1,1,1')
+    d = Data('./Datasets/SP1-2012.csv', './Datasets/SP1-2012_weightedAverage.csv', attrs=','.join(averages_fields), averages='5,4,3,2,1')
 

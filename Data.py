@@ -20,7 +20,6 @@ class Data(object):
             self.__attrs = attrs
             self.__averages = averages
             self.__av = True
-
         self.__write_data_in_csv(fout)
 
     def __write_data_in_csv(self, fout):
@@ -40,7 +39,7 @@ class Data(object):
         if not self.__av:
             columns = self.__league.get_match_day(0).columns.values.tolist()
         else:
-            columns = self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages).columns.values.tolist()
+            columns = self.__league.get_match_day_with_weighted_average(n=0, attrs=self.__attrs, averages=self.__averages).columns.values.tolist()
 
         home_columns = []
         away_columns = []
@@ -69,12 +68,12 @@ class Data(object):
                         match_day = self.__league.get_match_day(i-1)
                 else:
                     if i == 0:
-                        aux = self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages).loc[:,self.__league.get_match_day_with_weighted_average(0).columns != 'Team']
-                        match_day = self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages)
+                        aux = self.__league.get_match_day_with_weighted_average(n=0, attrs=self.__attrs, averages=self.__averages).loc[:,self.__league.get_match_day_with_weighted_average(n=0, attrs=self.__attrs, averages=self.__averages).columns != 'Team']
+                        match_day = self.__league.get_match_day_with_weighted_average(n=0, attrs=self.__attrs, averages=self.__averages)
                         aux *= 0
-                        match_day.loc[:,self.__league.get_match_day_with_weighted_average(0, self.__attrs, self.__averages).columns != 'Team'] = aux
+                        match_day.loc[:,self.__league.get_match_day_with_weighted_average(n=0, attrs=self.__attrs, averages=self.__averages).columns != 'Team'] = aux
                     else:
-                        match_day = self.__league.get_match_day_with_weighted_average(i-1, self.__attrs, self.__averages)
+                        match_day = self.__league.get_match_day_with_weighted_average(n=i-1, attrs=self.__attrs, averages=self.__averages)
 
                 new_columns = []
                 for column in columns:

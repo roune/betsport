@@ -76,7 +76,7 @@ class League(object):
 
                 values.append(sum(np.multiply(average_values, averages)) / n_averages)
 
-            classification[attr + 'Average'] = values
+            classification[attr] = values
 
         return classification
 
