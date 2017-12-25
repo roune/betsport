@@ -1,9 +1,10 @@
+from itertools import tee
 from time import time
 
 import numpy as np
 import pandas as pd
 from scipy.stats import randint as sp_randint
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV, cross_val_score
 from sklearn.model_selection import StratifiedKFold
@@ -31,15 +32,26 @@ def report(results, n_top=3):
 if __name__ == '__main__':
 
     lenc = LabelEncoder()
-    data=pd.read_csv('./Datasets/SP1_data.csv')
+    data=pd.read_csv('./Datasets/SP1-2016_data.csv')
 
     y_df = data['HTR']
     x_df = data.loc[:,data.columns != 'HTR']
     y = lenc.fit_transform(np.array(y_df))
     X = np.array(x_df.loc[:,[True if c not in  ['Div','Date','HomeTeam','AwayTeam','HTTeam','ATTeam'] else False for c in x_df.columns]])
+
+    final_x = []
+    final_y = []
+    for i in range(X.shape[0]):
+        if np.any(X[i]):
+            final_x.append(X[i])
+            final_y.append(y[i])
+
+    X = np.array(final_x)
+    y = np.array(final_y)
+
     # Cross Validation a usar y numero maximo de iteraciones
     cv = StratifiedKFold(n_splits=10, shuffle=True).split(X, y)
-    n_iter_search = 20
+    n_iter_search = 10
 
 
     clfRF = RandomForestClassifier()
@@ -50,64 +62,46 @@ if __name__ == '__main__':
                  "bootstrap": [True, False],
                  "criterion": ["gini", "entropy"],
                  "class_weight": ['balanced', None]}
-    #
-    #
-    #rsRF = RandomizedSearchCV(clfRF, param_distributions=param_RF,
-    #                                    n_iter=n_iter_search,n_jobs=-1,cv=cv)
 
-    #start = time()
-    #rsRF.fit(X, y)
-    #print("RandomForestClassifier:")
-    #print("RandomizedSearchCV tarda %.2f segundos"
-    #      " opciones de los parametros." % ((time() - start)))
-    #report(rsRF.cv_results_)
+    cv, cvcopy = tee(cv)
+    rsRF = RandomizedSearchCV(clfRF, param_distributions=param_RF,
+                                        n_iter=n_iter_search,n_jobs=-1,cv=cvcopy)
 
-    # clfSVC = SVC()
-    # param_SVC = {"C": sp_randint(1, 1000),
-    #              "gamma": [0.0001,0.001,"auto"],
-    #              "degree": sp_randint(3,20),
-    #              "kernel": ["linear","rbf","sigmoid"],
-    #              "class_weight":['balanced',None]}
-    #
-    #
-    # rsSVC = RandomizedSearchCV(clfSVC, param_distributions=param_SVC,
-    #                           n_iter=n_iter_search, n_jobs=-1,cv=cv)
-    #
-    # start = time()
-    # rsSVC.fit(X, y)
-    # print("SVC:")
-    # print("RandomizedSearchCV tarda %.2f segundos"
-    #       " opciones de los parametros." % ((time() - start)))
-    # report(rsSVC.cv_results_)
+    start = time()
+    rsRF.fit(X, y)
+    print("RandomForestClassifier:")
+    print("RandomizedSearchCV tarda %.2f seconds"
+          " opciones de los parametros." % ((time() - start)))
+    report(rsRF.cv_results_)
 
-    #clfSVCBest = SVC(C=947, class_weight=None, degree=10, gamma=0.001, kernel='sigmoid',probability=True)
-    #clfAda=AdaBoostClassifier(base_estimator=clfSVCBest)
+    clfSVC = SVC()
+    param_SVC = {"C": sp_randint(1, 1000),
+                 "gamma": [0.0001,0.001,"auto"],
+                 "degree": sp_randint(3,20),
+                 "kernel": ["linear","rbf","sigmoid"],
+                 "class_weight":['balanced',None]}
+    cv, cvcopy = tee(cv)
+    rsSVC = RandomizedSearchCV(clfSVC, param_distributions=param_SVC,
+                               n_iter=n_iter_search, n_jobs=-1,cv=cvcopy)
 
-    param_ADA = {
-        "n_estimators":sp_randint(200, 1000),
-        "learning_rate": [0.001,0.01,0.1,1]
-    }
+    start = time()
+    rsSVC.fit(X, y)
+    print("SVC:")
+    print("RandomizedSearchCV tarda %.2f seconds"
+          " opciones de los parametros." % ((time() - start)))
+    report(rsSVC.cv_results_)
 
-    # rsADA = RandomizedSearchCV(clfAda, param_distributions=param_ADA,
-    #                           n_iter=n_iter_search, n_jobs=-1,cv=cv)
+    clfET = ExtraTreesClassifier()
+    cv, cvcopy = tee(cv)
+    rsET = RandomizedSearchCV(clfET, param_distributions=param_RF,
+                               n_iter=n_iter_search, n_jobs=-1, cv=cvcopy)
 
-    #start = time()
-    #rsADA.fit(X, y)
-    #print("AdaBoost(SVC):")
-    #print("RandomizedSearchCV tarda %.2f segundos"
-    #      " opciones de los parametros." % ((time() - start)))
-    #report(rsADA.cv_results_)
-
-    # clfET = ExtraTreesClassifier()
-    # rsET = RandomizedSearchCV(clfET, param_distributions=param_RF,
-    #                           n_iter=n_iter_search, n_jobs=-1, cv=cv)
-    #
-    # start = time()
-    # rsET.fit(X, y)
-    # print("ExtraTreesClassifier:")
-    # print("RandomizedSearchCV tarda %.2f segundos"
-    #       " opciones de los parametros." % ((time() - start)))
-    # report(rsET.cv_results_)
+    start = time()
+    rsET.fit(X, y)
+    print("ExtraTreesClassifier:")
+    print("RandomizedSearchCV tarda %.2f seconds"
+          " opciones de los parametros." % ((time() - start)))
+    report(rsET.cv_results_)
 
 
     ######### KNN #######
@@ -117,17 +111,17 @@ if __name__ == '__main__':
         "algorithm": ["auto", "ball_tree", "kd_tree", "brute"],
         "weights": ["uniform", "distance"]
     }
+    cv, cvcopy = tee(cv)
+    rsKNN = RandomizedSearchCV(clfKNN, param_distributions=param_KNN,
+                               n_iter=n_iter_search, n_jobs=-1, cv=cvcopy)
 
-    #rsKNN = RandomizedSearchCV(clfKNN, param_distributions=param_KNN,
-    #                           n_iter=n_iter_search, n_jobs=-1, cv=cv)
 
-
-    #start = time()
-    #rsKNN.fit(X, y)
-    #print("NearestNeighborClassifier:")
-    #print("RandomizedSearchCV tarda %.2f segundos"
-    #      " opciones de los parametros." % ((time() - start)))
-    #report(rsKNN.cv_results_)
+    start = time()
+    rsKNN.fit(X, y)
+    print("NearestNeighborClassifier:")
+    print("RandomizedSearchCV tarda %.2f segundos"
+          " opciones de los parametros." % ((time() - start)))
+    report(rsKNN.cv_results_)
 
 
 
@@ -139,9 +133,9 @@ if __name__ == '__main__':
         "fit_intercept": [True, False],
         "solver": ["newton-cg", "sag", "saga", "lbfgs"]
     }
-
+    cv, cvcopy = tee(cv)
     rsLR = RandomizedSearchCV(clfLR, param_distributions=param_LR,
-                              n_iter=n_iter_search, n_jobs=-1, cv=cv)
+                              n_iter=n_iter_search, n_jobs=-1, cv=cvcopy)
 
     start = time()
     rsLR.fit(X, y)
@@ -156,7 +150,8 @@ if __name__ == '__main__':
     clfNB = GaussianNB()
 
     start = time()
-    score = cross_val_score(clfNB, X, y, cv=cv)
+    cv, cvcopy = tee(cv)
+    score = cross_val_score(clfNB, X, y, cv=cvcopy)
     print("NaiveBayesClassifier:")
     print("NaiveBayesClassifier tarda %.2f segundos"
           " opciones de los parametros." % ((time() - start)))
