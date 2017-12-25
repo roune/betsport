@@ -54,7 +54,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_
 num_atributes = X_train.shape[1]
 
 net = tflearn.input_data(shape=[None, num_atributes])
-net = tflearn.fully_connected(net, 512, activation="leakyrelu")
+net = tflearn.fully_connected(net, 300, activation="leakyrelu")
 net = tflearn.fully_connected(net, 3, activation="leakyrelu")
 net = tflearn.regression(net, optimizer= "Nesterov",
                          loss= "categorical_crossentropy", name="output1")
