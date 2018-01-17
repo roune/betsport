@@ -32,10 +32,10 @@ def report(results, n_top=3):
 if __name__ == '__main__':
 
     lenc = LabelEncoder()
-    data=pd.read_csv('./Datasets/SP1-2016_data.csv')
+    data=pd.read_csv('./Datasets/SP1-2016_normAverage.csv')
 
-    y_df = data['HTR']
-    x_df = data.loc[:,data.columns != 'HTR']
+    y_df = data['FTR']
+    x_df = data.loc[:,data.columns != 'FTR']
     y = lenc.fit_transform(np.array(y_df))
     X = np.array(x_df.loc[:,[True if c not in  ['Div','Date','HomeTeam','AwayTeam','HTTeam','ATTeam'] else False for c in x_df.columns]])
 
