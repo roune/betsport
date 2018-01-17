@@ -1,0 +1,126 @@
+# SP1-2016_data.csv
+## Primera
+#####RandomForestClassifier:
+RandomizedSearchCV tarda 7.70 seconds opciones de los parametros.
+
+Modelo posicion: 1\
+Acierto: 0.456 (std: 0.063)\
+Parametros Modelo: {'bootstrap': True, 'class_weight': 'balanced', 'criterion': 'gini', 'max_depth': 6, 'min_samples_leaf': 6, 'min_samples_split': 4, 'n_estimators': 706}
+
+Modelo posicion: 2\
+Acierto: 0.433 (std: 0.067)\
+Parametros Modelo: {'bootstrap': True, 'class_weight': 'balanced', 'criterion': 'entropy', 'max_depth': 6, 'min_samples_leaf': 6, 'min_samples_split': 10, 'n_estimators': 970}
+
+#####SVC:
+RandomizedSearchCV tarda 2.49 seconds opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.419 (std: 0.015)\
+Parametros Modelo: {'C': 792, 'class_weight': None, 'degree': 17, 'gamma': 0.001, 'kernel': 'sigmoid'}
+
+Modelo posicion: 2\
+Acierto: 0.392 (std: 0.021)\
+Parametros Modelo: {'C': 779, 'class_weight': 'balanced', 'degree': 11, 'gamma': 'auto', 'kernel': 'sigmoid'}\
+
+#####ExtraTreesClassifier:
+RandomizedSearchCV tarda 6.75 seconds opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.458 (std: 0.047)\
+Parametros Modelo: {'bootstrap': True, 'class_weight': None, 'criterion': 'gini', 'max_depth': None, 'min_samples_leaf': 4, 'min_samples_split': 3, 'n_estimators': 863}\
+
+Modelo posicion: 2\
+Acierto: 0.453 (std: 0.065)\
+Parametros Modelo: {'bootstrap': True, 'class_weight': None, 'criterion': 'gini', 'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 10, 'n_estimators': 919}\
+
+#####NearestNeighborClassifier:
+RandomizedSearchCV tarda 2.41 segundos opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.433 (std: 0.116)\
+Parametros Modelo: {'weights: 'distance', 'n_neighbors': 1, 'algorithm': 'brute'}\
+
+Modelo posicion: 2\
+Acierto: 0.419 (std: 0.056)\
+Parametros Modelo: {'weights': 'uniform', 'n_neighbors': 7, 'algorithm': 'brute'}\
+
+#####LogisticRegressionClassifier:
+RandomizedSearchCV tarda 2.41 segundos opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.464 (std: 0.036)\
+Parametros Modelo: {'tol': 0.5, 'solver': 'sag', 'multi_class': 'ovr', 'fit_intercept': False}\
+
+Modelo posicion: 2\
+Acierto: 0.442 (std: 0.088)\
+Parametros Modelo: {'tol': 0.1, 'solver': 'sag', 'multi_class': 'ovr', 'fit_intercept': True}\
+
+#####NaiveBayesClassifier:
+NaiveBayesClassifier tarda 0.01 segundos opciones de los parametros.\
+Acierto:  0.424041184041\
+
+## Segunda
+
+#####RandomForestClassifier:
+RandomizedSearchCV tarda 8.34 seconds opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.472 (std: 0.091)\
+Parametros Modelo: {'bootstrap': True, 'class_weight': None, 'criterion': 'entropy', 'max_depth': 6, 'min_samples_leaf': 8, 'min_samples_split': 8, 'n_estimators': 576}\
+
+Modelo posicion: 2\
+Acierto: 0.458 (std: 0.107)\
+Parametros Modelo: {'bootstrap': False, 'class_weight': None, 'criterion': 'entropy', 'max_depth': 6, 'min_samples_leaf': 8, 'min_samples_split': 4, 'n_estimators': 975}\
+
+#####SVC:
+
+RandomizedSearchCV tarda 2.20 seconds opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.417 (std: 0.040)\
+Parametros Modelo: {'C': 772, 'class_weight': None, 'degree': 10, 'gamma': 0.001, 'kernel': 'rbf'}\
+
+Modelo posicion: 2\
+Acierto: 0.278 (std: 0.101)\
+Parametros Modelo: {'C': 890, 'class_weight': 'balanced', 'degree': 12, 'gamma': 0.001, 'kernel': 'sigmoid'}\
+
+#####ExtraTreesClassifier:
+
+RandomizedSearchCV tarda 6.64 seconds opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.436 (std: 0.089)\
+Parametros Modelo: {'bootstrap': True, 'class_weight': 'balanced', 'criterion': 'entropy', 'max_depth': None, 'min_samples_leaf': 3, 'min_samples_split': 2, 'n_estimators': 918}\
+
+Modelo posicion: 2\
+Acierto: 0.425 (std: 0.069)\
+Parametros Modelo: {'bootstrap': True, 'class_weight': 'balanced', 'criterion': 'gini', 'max_depth': 6, 'min_samples_leaf': 9, 'min_samples_split': 8, 'n_estimators': 978}\
+
+#####NearestNeighborClassifier:
+
+RandomizedSearchCV tarda 2.11 segundos opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.442 (std: 0.057)\
+Parametros Modelo: {'weights': 'distance', 'n_neighbors': 1, 'algorithm': 'kd_tree'}\
+
+Modelo posicion: 2\
+Acierto: 0.439 (std: 0.041)\
+Parametros Modelo: {'weights': 'uniform', 'n_neighbors': 7, 'algorithm': 'auto'}\
+
+#####LogisticRegressionClassifier:
+
+RandomizedSearchCV tarda 2.76 segundos opciones de los parametros.\
+
+Modelo posicion: 1\
+Acierto: 0.431 (std: 0.070)\
+Parametros Modelo: {'tol': 0.01, 'solver': 'sag', 'multi_class': 'multinomial', 'fit_intercept': True}\
+
+Modelo posicion: 2\
+Acierto: 0.419 (std: 0.071)\
+Parametros Modelo: {'tol': 0.01, 'solver': 'lbfgs', 'multi_class': 'ovr', 'fit_intercept': False}\
+
+#####NaiveBayesClassifier:
+
+NaiveBayesClassifier tarda 0.01 segundos opciones de los parametros.\
+Acierto:  0.408672243672\

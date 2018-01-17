@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # Cross Validation a usar y numero maximo de iteraciones
     cv = StratifiedKFold(n_splits=10, shuffle=True).split(X, y)
-    n_iter_search = 10
+    n_iter_search = 2
 
 
     clfRF = RandomForestClassifier()
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     cv, cvcopy = tee(cv)
     rsRF = RandomizedSearchCV(clfRF, param_distributions=param_RF,
-                                        n_iter=n_iter_search,n_jobs=-1,cv=cvcopy)
+                                        n_iter=n_iter_search,n_jobs=4,cv=cvcopy)
 
     start = time()
     rsRF.fit(X, y)
@@ -82,7 +82,7 @@ if __name__ == '__main__':
                  "class_weight":['balanced',None]}
     cv, cvcopy = tee(cv)
     rsSVC = RandomizedSearchCV(clfSVC, param_distributions=param_SVC,
-                               n_iter=n_iter_search, n_jobs=-1,cv=cvcopy)
+                               n_iter=n_iter_search, n_jobs=4,cv=cvcopy)
 
     start = time()
     rsSVC.fit(X, y)
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     clfET = ExtraTreesClassifier()
     cv, cvcopy = tee(cv)
     rsET = RandomizedSearchCV(clfET, param_distributions=param_RF,
-                               n_iter=n_iter_search, n_jobs=-1, cv=cvcopy)
+                               n_iter=n_iter_search, n_jobs=4, cv=cvcopy)
 
     start = time()
     rsET.fit(X, y)
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     }
     cv, cvcopy = tee(cv)
     rsKNN = RandomizedSearchCV(clfKNN, param_distributions=param_KNN,
-                               n_iter=n_iter_search, n_jobs=-1, cv=cvcopy)
+                               n_iter=n_iter_search, n_jobs=4, cv=cvcopy)
 
 
     start = time()
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     }
     cv, cvcopy = tee(cv)
     rsLR = RandomizedSearchCV(clfLR, param_distributions=param_LR,
-                              n_iter=n_iter_search, n_jobs=-1, cv=cvcopy)
+                              n_iter=n_iter_search, n_jobs=4, cv=cvcopy)
 
     start = time()
     rsLR.fit(X, y)

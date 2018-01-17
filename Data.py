@@ -32,9 +32,9 @@ class Data(object):
         teams = sorted(set(teams))
 
         for team in teams:
-            matches[team] = self.__data[(self.__data.HomeTeam == team)][['Div', 'Date', 'HomeTeam', 'AwayTeam', 'HTR']] #  | (self.__data.AwayTeam == team)
+            matches[team] = self.__data[(self.__data.HomeTeam == team)][['Div', 'Date', 'HomeTeam', 'AwayTeam', 'FTR']] #  | (self.__data.AwayTeam == team)
 
-        columns_dt = ['Div', 'Date', 'HomeTeam', 'AwayTeam', 'HTR']
+        columns_dt = ['Div', 'Date', 'HomeTeam', 'AwayTeam', 'FTR']
 
         if not self.__av:
             columns = self.__league.get_match_day(0).columns.values.tolist()
