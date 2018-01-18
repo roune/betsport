@@ -135,13 +135,39 @@ Acierto:  0.408672243672
 
 # 12/13/14/15/16
 
-#### Ramdon Forest
+### Ramdon Forest mejor arriba
 
+#### Fit
 Accuracy: 0.54 (+/- 0.05)
 
 Accuracy: 0.54 (+/- 0.05)
 
 Accuracy: 0.53 (+/- 0.04)
+
+#### Test
+
+Accuracy: 0.5389
+Clases predichas procentaje H(0.7986) D(0.0194) A(0.1819)
+
+Accuracy: 0.5389
+Clases predichas procentaje H(0.7951) D(0.0201) A(0.1847)
+
+### Ramdon default 1000 estiamdores
+
+#### Fit
+
+Accuracy: 0.5211 (+/- 0.0350)
+Accuracy: 0.5250 (+/- 0.0361)
+
+#### Test
+
+Accuracy: 0.5528
+Clases predichas procentaje H(0.4764) D(0.2292) A(0.2944)
+
+Accuracy: 0.5417
+Clases predichas procentaje H(0.4764) D(0.2292) A(0.2944)
+
+
 
 
 
