@@ -14,7 +14,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 
 
-def report(results, n_top=3):
+def report(results, n_top=2):
     '''
     :param results: Resultados del clasidicador
     :param n_top: Numero de puestos a mostrar
@@ -29,8 +29,8 @@ def report(results, n_top=3):
             print("Parametros Modelo: {0}".format(results['params'][candidate]))
             print("")
 
-if __name__ == '__main__':
 
+def main():
     lenc = LabelEncoder()
     data=pd.read_csv('./Datasets/SP1-2016_normAverage.csv')
 
@@ -156,4 +156,10 @@ if __name__ == '__main__':
     print("NaiveBayesClassifier tarda %.2f segundos"
           " opciones de los parametros." % ((time() - start)))
     print("Acierto: ", np.mean(score))
+
+
+
+
+if __name__ == '__main__':
+    main()
 
