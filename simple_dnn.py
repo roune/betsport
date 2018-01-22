@@ -11,7 +11,23 @@ lenc = LabelEncoder()
 final_x = []
 final_y = []
 
-files = ['./Datasets/SP1-2016_data.csv', './Datasets/SP1-2015_data.csv', './Datasets/SP1-2014_data.csv', './Datasets/SP1-2013_data.csv', './Datasets/SP1-2012_data.csv']
+files = [
+		 # './Datasets/SP1-2012_normAverage_withoutDuplicate.csv', 
+		 # './Datasets/SP1-2013_normAverage_withoutDuplicate.csv',
+		 # './Datasets/SP1-2014_normAverage_withoutDuplicate.csv', 
+		 # './Datasets/SP1-2015_normAverage_withoutDuplicate.csv',
+		 # './Datasets/SP1-2016_normAverage_withoutDuplicate.csv', 
+		 # './Datasets/D1-2012_normAverage_withoutDuplicate.csv',
+		 # './Datasets/D1-2013_normAverage_withoutDuplicate.csv', 
+		 # './Datasets/D1-2014_normAverage_withoutDuplicate.csv',
+		 # './Datasets/D1-2015_normAverage_withoutDuplicate.csv', 
+		 # './Datasets/D1-2016_normAverage_withoutDuplicate.csv', 
+		 './Datasets/E0-2012_normAverage_withoutDuplicate.csv',
+		 './Datasets/E0-2013_normAverage_withoutDuplicate.csv',
+		 './Datasets/E0-2015_normAverage_withoutDuplicate.csv',
+		 './Datasets/E0-2016_normAverage_withoutDuplicate.csv',
+		 './Datasets/E0-2017_normAverage_withoutDuplicate.csv'
+		 ]
 
 for f in files:
 
@@ -21,8 +37,8 @@ for f in files:
 
 	data = data.sort_values(by='Date', ascending=True)
 
-	y_df = data['HTR']
-	x_df = data.loc[:,data.columns != 'HTR']
+	y_df = data['FTR']
+	x_df = data.loc[:,data.columns != 'FTR']
 	y_preprocessed = lenc.fit_transform(np.array(y_df))
 
 	X = np.array(x_df.loc[:,[True if c not in  ['Div','Date','HomeTeam','AwayTeam','HTTeam','ATTeam'] else False for c in x_df.columns]])
@@ -55,6 +71,8 @@ num_atributes = X_train.shape[1]
 
 net = tflearn.input_data(shape=[None, num_atributes])
 net = tflearn.fully_connected(net, 300, activation="leakyrelu")
+#net = tflearn.fully_connected(net, 300, activation="leakyrelu")
+#net = tflearn.fully_connected(net, 300, activation="leakyrelu")
 net = tflearn.fully_connected(net, 3, activation="leakyrelu")
 net = tflearn.regression(net, optimizer= "Nesterov",
                          loss= "categorical_crossentropy", name="output1")
